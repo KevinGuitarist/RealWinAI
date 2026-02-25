@@ -1,0 +1,27 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "uvicorn source.main:app --host 0.0.0.0 --port $PORT"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[env]
+PYTHON_VERSION = "3.12.12"
+DEBUG = "true"
+OPENAI_API_KEY = "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"
+CRICKET_API_KEY = "RS5:836fe0c1a85d44000f7ebe67f9d730c4"
+CRICKET_PROJECT_ID = "RS_P_1942111570733699074"
+FOOTBALL_API_TOKEN = "7O6SVG55TP0z3aK9uZKcM2zKJ90pdTemHBViFl5GFpUazz8NyjPlR2C7ygey"
+APP_ENV = "production"
+FRONTEND_URL = "https://realwin-frontend-master.vercel.app"
+CORS_ORIGINS = "https://realwin-frontend-master.vercel.app,https://realwin-frontend-master-a7tonaavf-vaibhav05-edus-projects.vercel.app"
+DB_HOST = "realwin.czgiwmwqcexk.eu-west-2.rds.amazonaws.com"
+DB_NAME = "postgres"
+DB_USER = "postgres"
+DB_PASSWORD = "postgrespassword"
+DB_PORT = "5432"
+AWS_ACCESS_KEY_ID = "dummy"
+AWS_SECRET_ACCESS_KEY = "dummy"
+AWS_REGION = "us-east-1"
+EMAIL_FROM = "noreply@realwin.ai"

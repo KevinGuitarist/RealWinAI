@@ -1,0 +1,5 @@
+beautifulsoup4
+openai
+psycopg2-binary
+pytz
+requests

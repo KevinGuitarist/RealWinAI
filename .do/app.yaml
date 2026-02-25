@@ -1,0 +1,18 @@
+name: realwin-ai-max
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: Vaibhav05-edu/RealWinAIMAX
+    branch: main
+  run_command: uvicorn source.main:app --host 0.0.0.0 --port $PORT
+  environment_slug: python
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  envs:
+  - key: PYTHON_VERSION
+    value: "3.11.9"
+  - key: PORT
+    value: "8080"
+  health_check:
+    http_path: /health

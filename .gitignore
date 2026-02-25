@@ -1,0 +1,15 @@
+# Editors
+.idea/
+.vscode/
+
+# Mac/OSX
+.DS_Store
+
+# Environments
+venv/
+.env
+realwin_packages
+
+# Cache
+__pycache__
+test.py

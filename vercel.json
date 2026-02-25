@@ -1,0 +1,18 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "source/main.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "source/main.py"
+        }
+    ],
+    "env": {
+        "PYTHON_VERSION": "3.11.9"
+    }
+}

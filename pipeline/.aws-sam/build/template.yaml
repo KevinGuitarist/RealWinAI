@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Template for Realwin.ai core lambda functions
+
+  '
+Parameters:
+  Stage:
+    Type: String
+    Description: Stage to deploy resources to
+    Default: dev
+    AllowedValues:
+    - dev
+    - prod
+  BatchJobQueueName:
+    Type: String
+    Default: realwin_cricket_queue
+  BatchJobDefinitionName:
+    Type: String
+    Default: realwin_cricket_def
+  IncludeTimestampInJobName:
+    Type: String
+    AllowedValues:
+    - 'true'
+    - 'false'
+    Default: 'false'
+    Description: If "true", appends YYYYMMDDHH to the JobName (helpful for log searching).
+Conditions:
+  IsProdStack:
+    Fn::Equals:
+    - Ref: AWS::StackName
+    - realwin-serverless-prod
+  UseTimeSuffix:
+    Fn::Equals:
+    - Ref: IncludeTimestampInJobName
+    - 'true'
+Globals:
+  Function:
+    Timeout: 900
+    Tracing: Active
+    LoggingConfig:
+      LogFormat: JSON
+  Api:
+    TracingEnabled: true
+Resources:
+  SchedulerIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: scheduler.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+      - PolicyName: SchedulerBatchSubmit
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - batch:SubmitJob
+            Resource:
+            - Fn::Sub: arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-queue/${BatchJobQueueName}
+            - Fn::Sub: arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-definition/${BatchJobDefinitionName}:*
+  CricketEvery4HoursScheduler:
+    Condition: IsProdStack
+    Type: AWS::Scheduler::Schedule
+    Properties:
+      Name: cricket-every-4-hours
+      Description: Submit job every 4 hours
+      ScheduleExpression: rate(4 hours)
+      ScheduleExpressionTimezone: UTC
+      State: ENABLED
+      FlexibleTimeWindow:
+        Mode: 'OFF'
+      Target:
+        Arn: arn:aws:scheduler:::aws-sdk:batch:submitJob
+        RoleArn:
+          Fn::GetAtt:
+          - SchedulerIamRole
+          - Arn
+        Input:
+          Fn::If:
+          - UseTimeSuffix
+          - Fn::Sub: "{\n  \"JobName\": \"${Stage}-cricket-4h-${AWS::Region}-${AWS::StackName}-YYYYMMDDHH\"\
+              ,\n  \"JobQueue\": \"${BatchJobQueueName}\",\n  \"JobDefinition\": \"\
+              ${BatchJobDefinitionName}\",\n  \"ContainerOverrides\": {\n    \"Command\"\
+              : [\"python\",\"main.py\",\"{}\"]\n  }\n}\n"
+          - Fn::Sub: "{\n  \"JobName\": \"${Stage}-cricket-4h-${AWS::Region}-${AWS::StackName}\"\
+              ,\n  \"JobQueue\": \"${BatchJobQueueName}\",\n  \"JobDefinition\": \"\
+              ${BatchJobDefinitionName}\",\n  \"ContainerOverrides\": {\n    \"Command\"\
+              : [\"python\",\"main.py\",\"{}\"]\n  }\n}\n"
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+  ApplicationInsightsMonitoring:
+    Type: AWS::ApplicationInsights::Application
+    Properties:
+      ResourceGroupName:
+        Ref: ApplicationResourceGroup
+      AutoConfigurationEnabled: 'true'

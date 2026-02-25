@@ -1,0 +1,273 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* RealWin.AI Design System - Dark theme with green accents */
+
+@layer base {
+  :root {
+    --background: 210 11% 6%;
+    --foreground: 210 11% 96%;
+    
+    --surface: 210 11% 8%;
+    --surface-hover: 210 11% 12%;
+    
+    --brand-primary: 82 100% 50%;
+    --brand-primary-hover: 82 100% 45%;
+    --brand-accent: 82 100% 50%;
+    
+    --card: 210 11% 8%;
+    --card-foreground: 210 11% 96%;
+    --card-border: 82 100% 50%;
+    
+    --popover: 210 11% 8%;
+    --popover-foreground: 210 11% 96%;
+    
+    --primary: 82 100% 50%;
+    --primary-foreground: 210 11% 6%;
+    
+    --secondary: 210 11% 12%;
+    --secondary-foreground: 210 11% 96%;
+    
+    --muted: 210 11% 12%;
+    --muted-foreground: 210 11% 70%;
+    
+    --accent: 82 100% 50%;
+    --accent-foreground: 210 11% 6%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 11% 96%;
+    
+    --border: 210 11% 18%;
+    --input: 210 11% 12%;
+    --ring: 82 100% 50%;
+    
+    --radius: 0.75rem;
+    
+    --sidebar-background: 210 11% 6%;
+    --sidebar-foreground: 210 11% 96%;
+    --sidebar-primary: 82 100% 50%;
+    --sidebar-primary-foreground: 210 11% 6%;
+    --sidebar-accent: 210 11% 12%;
+    --sidebar-accent-foreground: 210 11% 96%;
+    --sidebar-border: 210 11% 18%;
+    --sidebar-ring: 82 100% 50%;
+    
+    --gradient-brand: linear-gradient(135deg, hsl(82 100% 50%), hsl(82 100% 45%));
+    --gradient-surface: linear-gradient(135deg, hsl(210 11% 8%), hsl(210 11% 12%));
+    
+    --shadow-brand: 0 10px 30px -5px hsl(82 100% 50% / 0.3);
+    --shadow-card: 0 4px 12px -2px hsl(210 11% 4% / 0.5);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    /* Fallback colors to prevent black screen */
+    background-color: hsl(210, 11%, 6%);
+    color: hsl(210, 11%, 96%);
+  }
+
+  /* Ensure minimum height and prevent blank screens */
+  html, body, #root {
+    min-height: 100vh;
+    background-color: hsl(210, 11%, 6%);
+  }
+}
+
+@layer utilities {
+  .gradient-brand {
+    background: var(--gradient-brand);
+  }
+  
+  .gradient-surface {
+    background: var(--gradient-surface);
+  }
+
+  /* Ensure Revolut popups appear on top of all other content and are fully interactive */
+  iframe[src*="revolut"],
+  iframe[src*="checkout"],
+  div[class*="revolut"],
+  div[id*="revolut"] {
+    z-index: 999999 !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    max-width: min(450px, 90vw) !important;
+    max-height: min(600px, 90vh) !important;
+    pointer-events: auto !important;
+  }
+
+  /* Revolut popup overlay should be on top and cover full screen */
+  body > div[style*="position: fixed"] {
+    z-index: 999998 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    pointer-events: auto !important;
+  }
+
+  /* Disable pointer events on all other elements when Revolut is active */
+  body:has(div[style*="position: fixed"]) > *:not(div[style*="position: fixed"]) {
+    pointer-events: none !important;
+  }
+
+  /* Ensure Revolut container has proper pointer events */
+  div[style*="position: fixed"] * {
+    pointer-events: auto !important;
+  }
+  
+  .shadow-brand {
+    box-shadow: var(--shadow-brand);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  /* MAX Avatar Animations - Elegant and Classy */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(1.15);
+      filter: blur(10px);
+    }
+    33% {
+      opacity: 0.5;
+      transform: scale(1.3);
+      filter: blur(12px);
+    }
+    66% {
+      opacity: 0.4;
+      transform: scale(1.25);
+      filter: blur(11px);
+    }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      opacity: 0.2;
+      transform: scale(1.35);
+      filter: blur(14px);
+    }
+    25% {
+      opacity: 0.35;
+      transform: scale(1.55);
+      filter: blur(17px);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1.5);
+      filter: blur(16px);
+    }
+    75% {
+      opacity: 0.25;
+      transform: scale(1.45);
+      filter: blur(15px);
+    }
+  }
+
+  @keyframes breathe-shadow {
+    0%, 100% {
+      opacity: 0.8;
+      transform: translateX(-50%) translateY(6px) scaleX(1);
+    }
+    50% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(10px) scaleX(1.15);
+    }
+  }
+
+  @keyframes ambient-glow {
+    0%, 100% {
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.08) 30%, rgba(34, 197, 94, 0.04) 60%, rgba(34, 197, 94, 0.01) 80%, transparent 100%);
+    }
+    33% {
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.12) 28%, rgba(34, 197, 94, 0.06) 55%, rgba(34, 197, 94, 0.02) 75%, transparent 100%);
+    }
+    66% {
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.18) 0%, rgba(34, 197, 94, 0.1) 32%, rgba(34, 197, 94, 0.05) 58%, rgba(34, 197, 94, 0.015) 78%, transparent 100%);
+    }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 5s ease-in-out infinite;
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 7s ease-in-out infinite;
+  }
+
+  .animate-breathe-shadow {
+    animation: breathe-shadow 4s ease-in-out infinite;
+  }
+
+  .animate-ambient-glow {
+    animation: ambient-glow 6s ease-in-out infinite;
+  }
+
+  /* Custom scrollbar for MAX chatbot - subtle black sleek */
+  .chatbot-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .chatbot-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  .chatbot-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    transition: background 0.2s ease;
+  }
+
+  .chatbot-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .chatbot-scrollbar::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  /* For Firefox */
+  .chatbot-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  }
+}
+
+iframe[src*="revolut"] {
+  position: fixed !important;       /* take full control of placement */
+  top: -20% !important;              /* move down a bit from the top */
+  left: 50% !important;             /* keep horizontally centered */
+  transform: translateX(-50%) !important;
+  z-index: 999999 !important;       /* make sure it stays on top */
+  max-height: 80vh !important;      /* optional: prevent cutoff on small screens */
+  border-radius: 20px;
+}
