@@ -3,11 +3,14 @@ services:
     name: max-betting-ai
     env: python
     buildCommand: |
-      # Install Python dependencies only
+      # Install Python dependencies
       pip install -U pip
-      pip install poetry==1.4.2
-      poetry config virtualenvs.create false
-      poetry install --no-interaction --no-ansi --only main
+      pip install -r requirements.txt
+      # Build frontend
+      cd frontend
+      npm install
+      npm run build
+      cd ..
     startCommand: "uvicorn source.main:app --host 0.0.0.0 --port $PORT"
     healthCheckPath: /health
     envVars:
@@ -26,9 +29,9 @@ services:
       - key: APP_ENV
         value: production
       - key: FRONTEND_URL
-        value: https://realwin-frontend-master-a7tonaavf-vaibhav05-edus-projects.vercel.app
+        value: https://realwin-frontend-master.vercel.app
       - key: CORS_ORIGINS
-        value: https://realwin-frontend-master-a7tonaavf-vaibhav05-edus-projects.vercel.app
+        value: https://realwin-frontend-master.vercel.app,https://realwin-frontend-master-a7tonaavf-vaibhav05-edus-projects.vercel.app
       - key: DB_HOST
         value: realwin.czgiwmwqcexk.eu-west-2.rds.amazonaws.com
       - key: DB_NAME

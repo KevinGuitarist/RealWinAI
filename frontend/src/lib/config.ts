@@ -10,11 +10,7 @@ export const config = {
     ? deployedBackendUrl
     : isLocalhost
       ? "http://localhost:8000"
-      : isDev
-        ? "https://dev-api.realwin.ai"
-        : isProduction
-          ? "https://api.realwin.ai"
-          : "https://lid-homeland-stunning-another.trycloudflare.com", // Final MAX backend with live data
+      : "https://realwinai.onrender.com", // Render deployment
   TOKEN_EXPIRY_HOURS: 1,
 } as const;
 
